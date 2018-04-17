@@ -27,3 +27,23 @@ def make_graph():
 				contracts[txn[1]][txn[0]] = 0
 			contracts[txn[0]][txn[1]] += 1
 			contracts[txn[1]][txn[0]] += 1
+	
+	contracts = {k: v for k, v in contracts.items() if v} # Only graph nodes with edges for now
+	return contracts 
+
+
+def generate_links(graph,filename):
+	output = [] 
+	for key, val in graph.items():
+		for mapped_key,mapped_val in val.items():
+			output.append({
+				"target": key,
+				"source": mapped_key,
+				"strength": 0.1
+			})
+	with open(filename, "w+") as file:
+		json.dump(output,file)
+
+
+
+
