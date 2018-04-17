@@ -19,7 +19,7 @@ def write_csv(filename,nested_lst):
 def pull_data():
 	# Headers for CSV 
 	# final = [["Rank","Address","Balance","Percentage","TxCount","Relative Path","Source Code(URL TEMP)"]]
-	final = [["Address","ContractName","Balance","TxCount","DateVerified"]]
+	final = [["Address","ContractName","Balance","TxCount"]]
 	page = 1
 	while True:
 		print ("page " + str(page))
@@ -37,7 +37,7 @@ def pull_data():
 			output.append([td for td in tr.findAll("td")])
 
 		# Delete empty cells
-		output = [[x[0], x[1], x[3], x[4], x[5]] for x in output if x]
+		output = [[x[0], x[1], x[3], x[4]] for x in output if x]
 		if len(output) == 0:
 			break;
 
@@ -46,6 +46,8 @@ def pull_data():
 			output[i] = [str(x).replace("<td>","").replace("</td>","").replace('<font color=\'orange\' size=2><i title=\'Verified Code\' class="fa fa-check-circle-o"></i></font>',"") \
 				.replace('class="fa fa-check-circle-o"', "").replace("Ether", "").replace("<b>","").replace("</b>","") for x in output[i]]
 			output[i][0] = (re.findall("<a.*?>(.*)</a>",output[i][0])[0])
+
+		output = [x for x in output if int(x[3]) > 2] #remove contracts that are just isolated
 		final.extend(output)
 		page += 1
 	write_csv("data/contracts.csv",final)

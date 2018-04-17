@@ -10,7 +10,7 @@ def get_contract_dict(filename):
 	with open(filename,"r") as file:
 		reader = csv.reader(file)
 		# dict(addr:dict(edges:numtxns)) though the inner dict doesn't have anything yet
-		return {row[0]:{} for row in reader}
+		return {row[0]:{} for row in reader if row[0] != 'Address'}
 
 def get_txns(filename):
 	with open(filename,"r") as file:
@@ -39,7 +39,7 @@ def generate_nodes():
 		output = []
 
 		for row in reader:
-			if group != 0 and int(row[3]) > 1:
+			if group != 0:
 				output.append({
 					'id': row[0],
 					'group': group, 
